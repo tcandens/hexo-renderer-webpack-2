@@ -53,14 +53,6 @@ var renderer = function(data, options, callback) {
       filename: path.basename(data.path)
     },
     plugins: [
-      new webpack.NoErrorsPlugin(),
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: isDevMode,
-        minimize: true,
-        compress: { warnings: false }
-      }),
-      new webpack.optimize.AggressiveMergingPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(
           isDevMode ? 'development' : 'production')
