@@ -53,6 +53,14 @@ var renderer = function(data, options, callback) {
       filename: path.basename(data.path)
     },
     plugins: [
+      new webpack.NoErrorsPlugin(),
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: isDevMode,
+        minimize: true,
+        compress: { warnings: false }
+      }),
+      new webpack.optimize.AggressiveMergingPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(
           isDevMode ? 'development' : 'production')
@@ -76,12 +84,6 @@ var renderer = function(data, options, callback) {
     }
 
     contents = fs.readFileSync(outputPath).toString();
-
-    // Fix problems with HTML beautification
-    // see: https://github.com/hexojs/hexo/issues/1663
-    contents = contents
-      .replace(/</g, ' < ')
-      .replace(/< </g, ' << ');
 
     return callback(null, contents);
   });
